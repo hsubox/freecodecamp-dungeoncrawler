@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux'
-import health from './simulationTime'
-import weapon from './simulationSize'
-import darknessFilter from './simulationWidth'
+import health from './health'
+import weapon from './weapon'
+import darknessFilter from './darknessFilter'
 
 const reducers = combineReducers({
   health,
   weapon,
-  darkness_filter
+  darknessFilter
 })
 
 export default reducers

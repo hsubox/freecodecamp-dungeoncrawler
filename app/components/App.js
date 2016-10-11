@@ -1,10 +1,10 @@
 import React from 'react'
-import InfoPanel from './InfoPanel'
+import InfoPanelContainer from '../containers/InfoPanelContainer'
 import Map from './Map'
 
 const App = () => (
   <div>
-    <InfoPanel />
+    <InfoPanelContainer />
     <Map />
   </div>
 )
