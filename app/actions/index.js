@@ -1,20 +1,19 @@
-export const setSpeed = (speed) => {
+export const adjHealth = (amount) => {
   return {
-    type: 'SET_SPEED',
-    speed
+    type: 'CHANGE',
+    amount
   }
 }
 
-export const setBoardSize = (size) => {
+export const adjWeapon = (new_weapon) => {
   return {
-    type: 'SET_BOARD_SIZE',
-    size
+    type: 'UPGRADE_WEAPON',
+    new_weapon
   }
 }
 
-export const changeSimulationStatus = (status) => {
+const adjDarknessFilter = () => {
   return {
-    type: 'CHANGE_SIMULATION_STATUS',
-    status
+    type: 'TOGGLE_DARKNESS'
   }
 }

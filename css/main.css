@@ -1,0 +1,22 @@
+#player {
+  background-color: blue;
+}
+.wall {
+  background-color: black;
+}
+.enemy {
+  background-color: red;
+}
+.health_up {
+  background-color: green;
+}
+.next-map {
+  background-color: purple;
+}
+.dark {
+  background-color: grey;
+}
+.tile {
+  height: 50px;
+  width: 50px;
+}

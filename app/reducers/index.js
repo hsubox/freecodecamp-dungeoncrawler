@@ -1,22 +1,12 @@
 import { combineReducers } from 'redux'
-import simulationTime from './simulationTime'
-import simulationSize from './simulationSize'
-import simulationWidth from './simulationWidth'
-import simulationHeight from './simulationHeight'
-import simulationSpeed from './simulationSpeed'
-import simulationStatus from './simulationStatus'
-import simulationGrid from './simulationGrid'
-import simulationCell from './simulationCell'
+import health from './simulationTime'
+import weapon from './simulationSize'
+import darknessFilter from './simulationWidth'
 
-const gameOfLifeApp = combineReducers({
-  simulationTime,
-  simulationSize,
-  simulationWidth,
-  simulationHeight,
-  simulationSpeed,
-  simulationStatus,
-  simulationGrid,
-  simulationCell
+const reducers = combineReducers({
+  health,
+  weapon,
+  darkness_filter
 })
 
-export default gameOfLifeApp
+export default reducers
