@@ -9,7 +9,7 @@ let store = createStore(reducers)
 
 render(
   <Provider store={store}>
-    <App />
+    <App getState={store.getState}/>
   </Provider>,
   document.getElementById("root")
 )
