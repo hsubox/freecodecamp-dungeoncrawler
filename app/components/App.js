@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import Hammer from 'hammerjs'
 import { tileType, weaponTypes, reverseLookup, ENEMY, PLAYER, ATTACK_VARIANCE } from '../constants/'
 import { damage, heal, move, setLocation, switchWeapon, addEntity, removeEntity, resetBoard, setMap, increaseLevel, resetLevel, setWindowSize, gainXp, levelUp, resetMap, addBoss, toggleDarkness
@@ -21,24 +21,20 @@ class App extends React.Component {
     hammertime.get('swipe').set({direction: Hammer.DIRECTION_ALL});
     hammertime.on('swipe', this._handleSwipe.bind(this));
   }
-
   componentWillUnmount() {
     window.removeEventListener('keydown', this._handleKeypress.bind(this));
     window.removeEventListener('resize', setWindowSize);
   }
-
-  _playerLeveledUp() {
-    const currLevel = this.props.player.level + 1;
-    levelUp(currLevel * PLAYER.attack, currLevel * PLAYER.health,
-              (currLevel + 1) * PLAYER.toNextLevel);
-  }
-
   _setupGame() {
     resetMap(createMap());
     this._fillMap();
     setWindowSize();
   }
-
+  _playerLeveledUp() {
+    const currLevel = this.props.player.level + 1;
+    levelUp(currLevel * PLAYER.attack, currLevel * PLAYER.health,
+              (currLevel + 1) * PLAYER.toNextLevel);
+  }
   _getEmptyCoords() {
     const {map, occupiedSpaces} = store.getState();
     let coords, x, y;
@@ -51,7 +47,6 @@ class App extends React.Component {
     } while (!coords);
     return coords;
   }
-
   _fillMap() {
     // Place player
     setLocation('player', this._getEmptyCoords());
@@ -73,11 +68,9 @@ class App extends React.Component {
     // Place boss on last (fifth) level
     if (state.level === 4) addBoss(125, 500, this._getEmptyCoords());
   }
-
   _addVector(coords, vector) {
     return {x: coords.x + vector.x, y: coords.y + vector.y};
   }
-
   _handleKeypress(e) {
     let vector = '';
     switch (e.keyCode) {
@@ -128,7 +121,6 @@ class App extends React.Component {
       this._handleMove(vector);
     }
   }
-
   _handleMove(vector) {
     const state = store.getState();
     const player = state.entities.player;
@@ -193,7 +185,6 @@ class App extends React.Component {
       }
     }
   }
-
   render() {
     const {map, entities, occupiedSpaces, level, player, windowHeight,
            windowWidth, winner, darkness} = this.props,
@@ -269,5 +260,16 @@ class App extends React.Component {
     );
   }
 }
+
+App.propTypes = {
+  player: PropTypes.object.isRequired,
+  entities: PropTypes.object.isRequired,
+  map: PropTypes.array.isRequired,
+  occupiedSpaces: PropTypes.object.isRequired,
+  level: PropTypes.number.isRequired,
+  windowHeight: PropTypes.number.isRequired,
+  windowWidth: PropTypes.number.isRequired,
+  darkness: PropTypes.bool.isRequired
+};
 
 export default App
