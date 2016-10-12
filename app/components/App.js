@@ -1,6 +1,6 @@
 import React from 'react'
 import Hammer from 'hammerjs'
-import { tileType, weaponTypes, reverseLookup, ENEMY, PLAYER, ATTACK_VARIANCE } from '../constants/index'
+import { tileType, weaponTypes, reverseLookup, ENEMY, PLAYER, ATTACK_VARIANCE } from '../constants/'
 import { damage, heal, move, setLocation, switchWeapon, addEntity, removeEntity, resetBoard, setMap, increaseLevel, resetLevel, setWindowSize, gainXp, levelUp, resetMap, addBoss, toggleDarkness
 } from '../actions/'
 import createMap from './CreateMap' // This is the algorithm for creating the map.
