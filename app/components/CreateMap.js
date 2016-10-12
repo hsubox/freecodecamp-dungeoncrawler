@@ -1,11 +1,12 @@
+import _ from 'lodash'
 import { tileType } from '../constants/index'
 
 // MAP GENERATOR
 // Returns a matrix of the given dimensions with the number of rooms specified
 function createMap(width = 100, height = 100, maxRoomSize = 20, minRoomSize = 6, maxHallLength = 5, numRooms = 20, roomChance = .75) {
   // init grid of walls
-  let map = Array(width).fill(0);
-  const blankCol = Array(height).fill(tileType.WALL);
+  let map = _.fill(Array(width), 0);
+  const blankCol = _.fill(Array(height),tileType.WALL);
   map = map.map(() => blankCol.slice());
 
   // create first room
@@ -22,7 +23,7 @@ function createMap(width = 100, height = 100, maxRoomSize = 20, minRoomSize = 6,
   // size is an object like {x: 5, y: 7}, fillVal is an int
   function fillRect(map, startCoord, size, fillVal) {
     for (let i = startCoord.x; i < startCoord.x + size.x; i++) {
-      map[i].fill(fillVal, startCoord.y, size.y + startCoord.y);
+      _.fill(map[i],fillVal, startCoord.y, size.y + startCoord.y);
     }
     return map;
   }

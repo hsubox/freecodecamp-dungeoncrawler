@@ -11,9 +11,9 @@ const ToggleButton = ({ id, handleClick, label }) => {
 }
 
 ToggleButton.propTypes = {
+  label: React.PropTypes.string.isRequired,
   id: React.PropTypes.string.isRequired,
-  handleClick: React.PropTypes.func.isRequired,
-  label: React.PropTypes.string.isRequired
+  handleClick: React.PropTypes.func.isRequired
 };
 
 export default ToggleButton;

@@ -1,3 +1,5 @@
+import store from '../store'
+
 export function damage(entity, value) {
   store.dispatch({type: 'DAMAGE', entityName: entity, value: value});
 }
@@ -52,12 +54,7 @@ export function resetMap(map) {
   store.dispatch({type: 'RESET_MAP', map: map});
 }
 export function addBoss(attack, health, coords) {
-  store.dispatch({
-    type: 'ADD_BOSS',
-    attack: attack,
-    health: health,
-    location: coords
-  });
+  store.dispatch({type: 'ADD_BOSS', attack: attack, health: health, location: coords});
 }
 export function toggleDarkness() {
   store.dispatch({type: 'TOGGLE_DARKNESS'});

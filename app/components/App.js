@@ -1,19 +1,17 @@
 import React from 'react'
-import {damage, heal, move, setLocation, switchWeapon, addEntity, removeEntity, resetBoard, setMap, increaseLevel, resetLevel, setWindowSize, gainXp, levelUp, resetMap, addBoss, toggleDarkness
+import Hammer from 'hammerjs'
+import { tileType, weaponTypes, reverseLookup, ENEMY } from '../constants/index'
+import { damage, heal, move, setLocation, switchWeapon, addEntity, removeEntity, resetBoard, setMap, increaseLevel, resetLevel, setWindowSize, gainXp, levelUp, resetMap, addBoss, toggleDarkness
 } from '../actions/'
 import createMap from './CreateMap' // This is the algorithm for creating the map.
+import ToggleButtonContainer from '../containers/ToggleButtonContainer'
+import store from '../store'
 
-const App = React.createClass({
-  propTypes: {
-    getState: React.PropTypes.func.isRequired
-  },
-  getInitialState: function() {
-    return this._select(this.props.getState());
-  },
-  componentWillMount: function() {
+class App extends React.Component {
+  componentWillMount() {
     this._setupGame();
-  },
-  componentDidMount: function() {
+  }
+  componentDidMount() {
     this._storeDataChanged();
     this.unsubscribe = store.subscribe(this._storeDataChanged);
     window.addEventListener('keydown', this._handleKeypress);
@@ -23,19 +21,22 @@ const App = React.createClass({
     const hammertime = new Hammer(touchElement);
     hammertime.get('swipe').set({direction: Hammer.DIRECTION_ALL});
     hammertime.on('swipe', this._handleSwipe);
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     this.unsubscribe();
     window.removeEventListener('keydown', this._handleKeypress);
     window.removeEventListener('resize', setWindowSize);
-  },
-  _storeDataChanged: function() {
-    const newState = this.props.getState()
+  }
+
+  _storeDataChanged() {
+    const newState = store.getState()
     // Should player level up?
     if (newState.entities.player.toNextLevel <= 0) this._playerLeveledUp();
     this.setState(this._select(newState));
-  },
-  _select: function(state) {
+  }
+
+  _select(state) {
     return {
       player: state.entities.player,
       entities: state.entities,
@@ -46,20 +47,23 @@ const App = React.createClass({
       windowWidth: state.windowWidth,
       darkness: state.darkness
     }
-  },
-  _playerLeveledUp: function() {
+  }
+
+  _playerLeveledUp() {
     const currLevel = this.state.player.level + 1;
     levelUp(currLevel * PLAYER.attack, currLevel * PLAYER.health,
               (currLevel + 1) * PLAYER.toNextLevel);
-  },
-  _setupGame: function() {
+  }
+
+  _setupGame() {
     resetMap(createMap());
     this._fillMap();
     this._storeDataChanged();
     setWindowSize();
-  },
-  _getEmptyCoords: function() {
-    const {map, occupiedSpaces} = this.props.getState();
+  }
+
+  _getEmptyCoords() {
+    const {map, occupiedSpaces} = store.getState();
     let coords, x, y;
     do {
       x = Math.floor(Math.random() * map.length);
@@ -69,12 +73,13 @@ const App = React.createClass({
       }
     } while (!coords);
     return coords;
-  },
-  _fillMap: function() {
+  }
+
+  _fillMap() {
     // Place player
     setLocation('player', this._getEmptyCoords());
     // Place items
-    const state = this.props.getState();
+    const state = store.getState();
     const weapon = weaponTypes[state.level];
     addEntity(weapon.entityName, 'weapon', weapon.health, weapon.attack, this._getEmptyCoords());
     // Place heath and enemies
@@ -90,14 +95,13 @@ const App = React.createClass({
     if (state.level < 4) addEntity('exit', 'exit', 0, 0, this._getEmptyCoords());
     // Place boss on last (fifth) level
     if (state.level === 4) addBoss(125, 500, this._getEmptyCoords());
-  },
-  _addVector: function(coords, vector) {
+  }
+
+  _addVector(coords, vector) {
     return {x: coords.x + vector.x, y: coords.y + vector.y};
-  },
-  _toggleDarkness: function() {
-    toggleDarkness();
-  },
-  _handleKeypress: function(e) {
+  }
+
+  _handleKeypress(e) {
     let vector = '';
     switch (e.keyCode) {
       case 37:
@@ -120,8 +124,9 @@ const App = React.createClass({
       e.preventDefault();
       this._handleMove(vector);
     }
-  },
-  _handleSwipe: function(e) {
+  }
+
+  _handleSwipe(e) {
     let vector;
     const {overallVelocity, angle} = e;
     if (Math.abs(overallVelocity) > .75) {
@@ -146,9 +151,10 @@ const App = React.createClass({
       e.preventDefault();
       this._handleMove(vector);
     }
-  },
-  _handleMove: function(vector) {
-    const state = this.props.getState();
+  }
+
+  _handleMove(vector) {
+    const state = store.getState();
     const player = state.entities.player;
     const map = state.map;
     const newCoords = this._addVector({x: player.x, y: player.y}, vector);
@@ -210,9 +216,9 @@ const App = React.createClass({
           break;
       }
     }
-  },
+  }
 
-  render: function() {
+  render() {
     const {map, entities, occupiedSpaces, level, player, windowHeight,
            windowWidth, winner, darkness} = this.state,
           SIGHT = 7,
@@ -277,10 +283,9 @@ const App = React.createClass({
           <li id = 'level'><span className = 'label'>Dungeon:</span> {level}</li>
         </ul>
         <div className = 'buttons'>
-          <ToggleButton
+          <ToggleButtonContainer
             label = 'Toggle Darkness'
-            id = 'toggleDarkness'
-            handleClick = {this._toggleDarkness} />
+            id = 'toggleDarkness' />
         </div>
         <div id = 'board'>
           {rows}
@@ -288,6 +293,6 @@ const App = React.createClass({
       </div>
     );
   }
-});
+}
 
 export default App
