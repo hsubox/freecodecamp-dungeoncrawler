@@ -20,6 +20,10 @@
 .exit {
   background-color: purple;
 }
+.dark {
+  color: black;
+  background-color: black;
+}
 .tile {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -32,10 +36,6 @@
   letter-spacing: 7px;
   width: .75em;
 }
-.dark {
-  color: black;
-  background-color: black;
-}
 .boardRow, .tile {
   margin: 0px;
   padding: 0px;
@@ -46,7 +46,7 @@
 }
 body {
   color: white;
-  font-family: Palatino, 'Palatino Linotype', Georgia;
+  font-family: Georgia;
   background-color: black;
 }
 h1, p {
