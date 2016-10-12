@@ -1,27 +1,78 @@
-#player {
-  background-color: blue;
+.WALL {
+  background-color: gray;
 }
-.wall {
-  background-color: black;
+.FLOOR {
+  background-color: white;
+}
+.player {
+  background-color: blue;
+  color: blue;
 }
 .enemy {
   background-color: red;
 }
-.health_up {
+.weapon {
+  background-color: orange;
+}
+.health {
   background-color: green;
 }
-.next-map {
+.exit {
   background-color: purple;
 }
-.dark {
-  background-color: grey;
-}
 .tile {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   display: inline-block;
   float: left;
-  height: 50px;
-  width: 50px;
+  letter-spacing: 7px;
+  width: .75em;
+}
+.dark {
+  color: black;
+  background-color: black;
+}
+.boardRow, .tile {
   margin: 0px;
   padding: 0px;
+  border-style: solid;
+  border-color: black;
+  border-width: 0px;
+  height: .75em;
+}
+body {
+  color: white;
+  font-family: Palatino, 'Palatino Linotype', Georgia;
+  background-color: black;
+}
+h1, p {
+  text-align: center;
+}
+#ui {
+  padding-left: 10px;
+}
+#ui li {
+  list-style: none;
+  float: left;
+  padding: 5px 15px;
+  border-style: none;
+  board-width: 1px;
+  border-color: black;
+  font-family: Roboto
+}
+.label {
+  font-weight: 700;
+}
+button {
+  float: right;
+  margin-right: 8%;
+  padding: 5px;
+}
+#board {
+  padding-top: 10px;
+  clear: both;
 }

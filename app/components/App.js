@@ -1,6 +1,6 @@
 import React from 'react'
 import Hammer from 'hammerjs'
-import { tileType, weaponTypes, reverseLookup, ENEMY } from '../constants/index'
+import { tileType, weaponTypes, reverseLookup, ENEMY, PLAYER, ATTACK_VARIANCE } from '../constants/index'
 import { damage, heal, move, setLocation, switchWeapon, addEntity, removeEntity, resetBoard, setMap, increaseLevel, resetLevel, setWindowSize, gainXp, levelUp, resetMap, addBoss, toggleDarkness
 } from '../actions/'
 import createMap from './CreateMap' // This is the algorithm for creating the map.
@@ -12,45 +12,23 @@ class App extends React.Component {
     this._setupGame();
   }
   componentDidMount() {
-    this._storeDataChanged();
-    this.unsubscribe = store.subscribe(this._storeDataChanged);
-    window.addEventListener('keydown', this._handleKeypress);
+    if (this.props.player.toNextLevel <= 0) this._playerLeveledUp();
+    window.addEventListener('keydown', this._handleKeypress.bind(this));
     window.addEventListener('resize', setWindowSize);
     // Setup touch controls
     const touchElement = document.getElementById('root');
     const hammertime = new Hammer(touchElement);
     hammertime.get('swipe').set({direction: Hammer.DIRECTION_ALL});
-    hammertime.on('swipe', this._handleSwipe);
+    hammertime.on('swipe', this._handleSwipe.bind(this));
   }
 
   componentWillUnmount() {
-    this.unsubscribe();
-    window.removeEventListener('keydown', this._handleKeypress);
+    window.removeEventListener('keydown', this._handleKeypress.bind(this));
     window.removeEventListener('resize', setWindowSize);
   }
 
-  _storeDataChanged() {
-    const newState = store.getState()
-    // Should player level up?
-    if (newState.entities.player.toNextLevel <= 0) this._playerLeveledUp();
-    this.setState(this._select(newState));
-  }
-
-  _select(state) {
-    return {
-      player: state.entities.player,
-      entities: state.entities,
-      map: state.map,
-      occupiedSpaces: state.occupiedSpaces,
-      level: state.level,
-      windowHeight: state.windowHeight,
-      windowWidth: state.windowWidth,
-      darkness: state.darkness
-    }
-  }
-
   _playerLeveledUp() {
-    const currLevel = this.state.player.level + 1;
+    const currLevel = this.props.player.level + 1;
     levelUp(currLevel * PLAYER.attack, currLevel * PLAYER.health,
               (currLevel + 1) * PLAYER.toNextLevel);
   }
@@ -58,7 +36,6 @@ class App extends React.Component {
   _setupGame() {
     resetMap(createMap());
     this._fillMap();
-    this._storeDataChanged();
     setWindowSize();
   }
 
@@ -125,7 +102,6 @@ class App extends React.Component {
       this._handleMove(vector);
     }
   }
-
   _handleSwipe(e) {
     let vector;
     const {overallVelocity, angle} = e;
@@ -220,11 +196,10 @@ class App extends React.Component {
 
   render() {
     const {map, entities, occupiedSpaces, level, player, windowHeight,
-           windowWidth, winner, darkness} = this.state,
+           windowWidth, winner, darkness} = this.props,
           SIGHT = 7,
           // This should match the css height and width in pixels
           tileSize = document.getElementsByClassName('tile').item(0) ? document.getElementsByClassName('tile').item(0).clientHeight : 10;
-
     // Get start coords for current viewport
     const numCols = Math.floor((windowWidth / tileSize) - 5),
           numRows = Math.floor((windowHeight/ tileSize) - 17);

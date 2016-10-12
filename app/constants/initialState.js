@@ -1,3 +1,5 @@
+import { tileType } from './index'
+
 const initialState = {
   // entities is an map of ids to object describing the entity
   entities: {
@@ -17,7 +19,7 @@ const initialState = {
   occupiedSpaces: {
     '0x0': 'player'
   },
-  map: [],
+  map: [[tileType.WALL]],
   level: 0,
   windowHeight: 500,
   windowWidth: 500,

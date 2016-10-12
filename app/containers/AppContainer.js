@@ -5,13 +5,20 @@ import App from '../components/App'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    state
+    player: state.entities.player,
+    entities: state.entities,
+    map: state.map,
+    occupiedSpaces: state.occupiedSpaces,
+    level: state.level,
+    windowHeight: state.windowHeight,
+    windowWidth: state.windowWidth,
+    darkness: state.darkness
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    
+
   }
 }
 
